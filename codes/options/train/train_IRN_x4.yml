@@ -15,8 +15,8 @@ datasets:
   train:
     name: DIV2K
     mode: LQGT
-    dataroot_GT: ~ # path to training HR images
-    dataroot_LQ: ~ # path to training reference LR images, not necessary, if not provided, LR images will be generated in dataloader
+    dataroot_GT: /home/mist/Invertible-Image-Rescaling/codes/datasets/train/HR # path to training HR images
+    dataroot_LQ: /home/mist/Invertible-Image-Rescaling/codes/datasets/train/LR # path to training reference LR images, not necessary, if not provided, LR images will be generated in dataloader
 
     use_shuffle: true
     n_workers: 6  # per GPU
@@ -29,8 +29,8 @@ datasets:
   val:
     name: val_DIV2K
     mode: LQGT
-    dataroot_GT: ~ # path to validation HR images
-    dataroot_LQ: ~ # path to validation reference LR images, not necessary, if not provided, LR images will be generated in dataloader
+    dataroot_GT: /home/mist/Invertible-Image-Rescaling/codes/datasets/valid/HR # path to validation HR images
+    dataroot_LQ: /home/mist/Invertible-Image-Rescaling/codes/datasets/valid/LR # path to validation reference LR images, not necessary, if not provided, LR images will be generated in dataloader
 
 
 #### network structures

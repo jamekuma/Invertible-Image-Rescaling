@@ -9,7 +9,8 @@ import models.lr_scheduler as lr_scheduler
 from .base_model import BaseModel
 from models.modules.loss import ReconstructionLoss
 from models.modules.Quantization import Quantization
-
+from torch.distributions.laplace import Laplace
+m = Laplace(torch.tensor([0.0]), torch.tensor([1.0]))
 logger = logging.getLogger('base')
 
 class IRNModel(BaseModel):
@@ -82,8 +83,13 @@ class IRNModel(BaseModel):
         self.ref_L = data['LQ'].to(self.device)  # LQ
         self.real_H = data['GT'].to(self.device)  # GT
 
+
     def gaussian_batch(self, dims):
-        return torch.randn(tuple(dims)).to(self.device)
+        # 改成拉普拉斯分布
+        # res = torch.randn(tuple(dims)).to(self.device)
+        res = m.sample(tuple(dims)).squeeze(-1).to(self.device)
+        # print(res.size())
+        return res
 
     def loss_forward(self, out, y, z):
         l_forw_fit = self.train_opt['lambda_fit_forw'] * self.Reconstruction_forw(out, y)
