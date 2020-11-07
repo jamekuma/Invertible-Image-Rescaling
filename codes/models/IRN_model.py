@@ -85,9 +85,8 @@ class IRNModel(BaseModel):
 
 
     def gaussian_batch(self, dims):
-        # 改成拉普拉斯分布
-        # res = torch.randn(tuple(dims)).to(self.device)
-        res = m.sample(tuple(dims)).squeeze(-1).to(self.device)
+        res = torch.randn(tuple(dims)).to(self.device)
+        # res = m.sample(tuple(dims)).squeeze(-1).to(self.device)
         # print(res.size())
         return res
 
