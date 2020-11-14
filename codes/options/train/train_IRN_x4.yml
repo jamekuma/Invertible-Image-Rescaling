@@ -6,11 +6,7 @@ use_tb_logger: true
 model: IRN
 distortion: sr
 scale: 4
-<<<<<<< HEAD
 gpu_ids: [2]
-=======
-gpu_ids: [0, 1]
->>>>>>> 4a06e20e84dc1f12bcab1ff9c7dbfea6adfb79a0
 
 
 #### datasets

@@ -131,51 +131,44 @@ def main():
 
     #### create model
     opt['is_train'] = False    # debug
-    model = create_model(opt)
+    # model = create_model(opt)
 
-    #### resume training
-    if resume_state:
-        logger.info('Resuming training from epoch: {}, iter: {}.'.format(
-            resume_state['epoch'], resume_state['iter']))
 
-        start_epoch = resume_state['epoch']
-        current_step = resume_state['iter']
-        model.resume_training(resume_state)  # handle optimizers and schedulers
-    else:
-        current_step = 0
-        start_epoch = 0
+    current_step = 0
+    start_epoch = 0
 
     # validation
     if current_step % opt['train']['val_freq'] == 0 and rank <= 0:
         avg_psnr = 0.0
         idx = 0
         for val_data in val_loader:
-            idx += 1
-            img_name = os.path.splitext(os.path.basename(val_data['LQ_path'][0]))[0]
-            img_dir = os.path.join(opt['path']['val_images'], img_name)
-            util.mkdir(img_dir)
+            print(val_data['GT'].size())
+            # idx += 1
+            # img_name = os.path.splitext(os.path.basename(val_data['LQ_path'][0]))[0]
+            # img_dir = os.path.join(opt['path']['val_images'], img_name)
+            # util.mkdir(img_dir)
 
-            model.feed_data(val_data)
-            print('test start')
-            model.test()
-            print('test end')
+            # model.feed_data(val_data)
+            # print('test start')
+            # model.test()
+            # print('test end')
 
-            visuals = model.get_current_visuals()
-            sr_img = util.tensor2img(visuals['SR'])  # uint8
-            gt_img = util.tensor2img(visuals['GT'])  # uint8
+            # visuals = model.get_current_visuals()
+            # sr_img = util.tensor2img(visuals['SR'])  # uint8
+            # gt_img = util.tensor2img(visuals['GT'])  # uint8
 
-            lr_img = util.tensor2img(visuals['LR'])
+            # lr_img = util.tensor2img(visuals['LR'])
 
-            gtl_img = util.tensor2img(visuals['LR_ref'])
+            # gtl_img = util.tensor2img(visuals['LR_ref'])
 
-            # Save SR images for reference
-            save_img_path = os.path.join(img_dir,
-                                                 '{:s}_{:d}.png'.format(img_name, current_step))
-            util.save_img(sr_img, save_img_path)
+            # # Save SR images for reference
+            # save_img_path = os.path.join(img_dir,
+            #                                      '{:s}_{:d}.png'.format(img_name, current_step))
+            # util.save_img(sr_img, save_img_path)
 
-            # Save LR images
-            save_img_path_L = os.path.join(img_dir, '{:s}_forwLR_{:d}.png'.format(img_name, current_step))
-            util.save_img(lr_img, save_img_path_L)
+            # # Save LR images
+            # save_img_path_L = os.path.join(img_dir, '{:s}_forwLR_{:d}.png'.format(img_name, current_step))
+            # util.save_img(lr_img, save_img_path_L)
 
 if __name__ == '__main__':
     main()
