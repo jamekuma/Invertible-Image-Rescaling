@@ -119,7 +119,8 @@ class IRNModel(BaseModel):
         l_forw_fit, l_forw_ce = self.loss_forward(self.output[:, :3, :, :], LR_ref, self.output[:, 3:, :, :])
 
         # backward upscaling
-        LR = self.Quantization(self.output[:, :3, :, :])
+        # LR = self.Quantization(self.output[:, :3, :, :])
+        LR = self.ref_L   # 把重构loss改成超分loss，即逆向推理的输入为LR图像，而不是正向推理的结果
         gaussian_scale = self.train_opt['gaussian_scale'] if self.train_opt['gaussian_scale'] != None else 1
         y_ = torch.cat((LR, gaussian_scale * self.gaussian_batch(zshape)), dim=1)
 
@@ -156,7 +157,8 @@ class IRNModel(BaseModel):
         with torch.no_grad():
             self.forw_L = self.netG(x=self.input)[:, :3, :, :]
             self.forw_L = self.Quantization(self.forw_L)
-            y_forw = torch.cat((self.forw_L, gaussian_scale * self.gaussian_batch(zshape)), dim=1)
+            # 改成使用实际LR逆向推理
+            y_forw = torch.cat((self.ref_L, gaussian_scale * self.gaussian_batch(zshape)), dim=1)
             self.fake_H = self.netG(x=y_forw, rev=True)[:, :3, :, :]
 
         self.netG.train()
